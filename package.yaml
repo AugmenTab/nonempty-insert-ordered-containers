@@ -1,0 +1,62 @@
+name:                nonempty-insert-ordered-containers
+version:             0.1.0.0
+github:              "AugmenTab/nonempty-insert-ordered-containers"
+license:             BSD-3-Clause
+author:              "Tyler Baum"
+maintainer:          "tyler.baum@protonmail.com"
+copyright:           "2025 Tyler Baum"
+
+language: Haskell2010
+
+extra-source-files:
+- README.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/AugmenTab/nonempty-insert-ordered-containers#readme>
+
+default-extensions:
+  - ImportQualifiedPost
+
+dependencies:
+  - base
+  - hashable
+  - insert-ordered-containers
+
+ghc-options:
+  - -j
+  - -Werror
+  - -Wall
+  - -Widentities
+  - -Wincomplete-record-updates
+  - -Wincomplete-uni-patterns
+  - -Wpartial-fields
+  - -Wredundant-constraints
+  - -fno-warn-orphans
+
+library:
+  source-dirs: src
+  exposed-modules:
+    - Data.NonEmpty.InsOrdHashMap
+    - Data.NonEmpty.InsOrdHashSet
+
+tests:
+  nonempty-insert-ordered-containers-test:
+    main:                Main.hs
+    source-dirs:         test
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - deepseq
+      - hedgehog
+      - nonempty-insert-ordered-containers
+      - tasty
+      - tasty-hedgehog
+      - tasty-hunit

@@ -1,0 +1,68 @@
+cabal-version: 2.2
+
+-- This file has been generated from package.yaml by hpack version 0.38.0.
+--
+-- see: https://github.com/sol/hpack
+
+name:           nonempty-insert-ordered-containers
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/AugmenTab/nonempty-insert-ordered-containers#readme>
+homepage:       https://github.com/AugmenTab/nonempty-insert-ordered-containers#readme
+bug-reports:    https://github.com/AugmenTab/nonempty-insert-ordered-containers/issues
+author:         Tyler Baum
+maintainer:     tyler.baum@protonmail.com
+copyright:      2025 Tyler Baum
+license:        BSD-3-Clause
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/AugmenTab/nonempty-insert-ordered-containers
+
+library
+  exposed-modules:
+      Data.NonEmpty.InsOrdHashMap
+      Data.NonEmpty.InsOrdHashSet
+  other-modules:
+      Paths_nonempty_insert_ordered_containers
+  autogen-modules:
+      Paths_nonempty_insert_ordered_containers
+  hs-source-dirs:
+      src
+  default-extensions:
+      ImportQualifiedPost
+  ghc-options: -j -Werror -Wall -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wpartial-fields -Wredundant-constraints -fno-warn-orphans
+  build-depends:
+      base
+    , hashable
+    , insert-ordered-containers
+  default-language: Haskell2010
+
+test-suite nonempty-insert-ordered-containers-test
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  other-modules:
+      Tests.NEInsOrdHashMap
+      Tests.NEInsOrdHashSet
+      Paths_nonempty_insert_ordered_containers
+  autogen-modules:
+      Paths_nonempty_insert_ordered_containers
+  hs-source-dirs:
+      test
+  default-extensions:
+      ImportQualifiedPost
+  ghc-options: -j -Werror -Wall -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wpartial-fields -Wredundant-constraints -fno-warn-orphans -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base
+    , deepseq
+    , hashable
+    , hedgehog
+    , insert-ordered-containers
+    , nonempty-insert-ordered-containers
+    , tasty
+    , tasty-hedgehog
+    , tasty-hunit
+  default-language: Haskell2010

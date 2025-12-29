@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+set -e
+
+if $(docker network inspect launchpad_dev >/dev/null 2>/dev/null); then
+  echo "Skipping creation of launchpad_dev docker network. It already exists."
+else
+  echo "Creating launchpad_dev docker network"
+  docker network create launchpad_dev
+fi
+
+if $(docker volume inspect launchpad_stack_root >/dev/null 2>/dev/null); then
+  echo \
+    "Skipping creation of launchpad_stack_root docker volume. It already \
+    exists."
+else
+  echo "Creating launchpad_stack_root docker network"
+  docker volume create launchpad_stack_root
+fi
+
+if [ -f .env ]; then
+  echo \
+    "Skipping creation of .env because it already exists. Remove it if you \
+    want this script to recreate it."
+else
+  echo "PROJECT_DIR=$PWD" >> .env
+  DOT_SSH_DIR="$HOME/.ssh"
+
+  ID_ED25519_FILE="id_ed25519"
+  ID_RSA_FILE="id_rsa"
+
+  if [ -f "$DOT_SSH_DIR/$ID_ED25519_FILE" ]; then
+    SSH_KEY_FILE="$ID_ED25519_FILE"
+  elif [ -f "$DOT_SSH_DIR/$ID_RSA_FILE" ]; then
+    SSH_KEY_FILE="$ID_RSA_FILE"
+  fi
+
+  echo "DOT_SSH_DIR=$DOT_SSH_DIR" >> .env
+
+  if [ "$SSH_KEY_FILE" ]; then
+    echo "$DOT_SSH_DIR/$SSH_KEY_FILE detected. It will be used to authenicate with github inside of docker containers."
+    echo "SSH_KEY_FILE=$SSH_KEY_FILE" >> .env
+  else
+    EXIT_FAILURE=true
+    echo "*** WARNING ***"
+    echo \
+      "Unable to find an ssh keyfile to use. Your docker containers may not \
+      be able to pull private dependencies from github. Please set \
+      DOT_SSH_DIR and SSH_KEY_FILE manually in the generated .env file."
+    echo "***************"
+    echo "SSH_KEY_FILE=" >> .env
+  fi
+
+fi
+
+if [ "$EXIT_FAILURE" != "" ]; then
+  exit 1
+fi

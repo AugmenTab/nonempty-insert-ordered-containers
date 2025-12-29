@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+source scripts/lib/run-in-container.sh
+
+exec bash --init-file ./scripts/lib/.init "$@"
+

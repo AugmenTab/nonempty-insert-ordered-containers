@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e
+
+stack --stack-yaml "stack-ghc-9.10.yaml" build --fast --test $@
+

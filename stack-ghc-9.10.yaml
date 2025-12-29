@@ -1,0 +1,4 @@
+<<: !include stack-base.yml
+
+resolver: lts-24.12
+allow-newer: true

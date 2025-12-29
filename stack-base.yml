@@ -1,0 +1,4 @@
+packages:
+  - .
+
+allow-different-user: true

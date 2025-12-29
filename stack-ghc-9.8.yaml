@@ -1,0 +1,3 @@
+<<: !include stack-base.yml
+
+resolver: lts-23.28
