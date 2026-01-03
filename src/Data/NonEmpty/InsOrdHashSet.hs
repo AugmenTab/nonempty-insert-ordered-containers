@@ -33,7 +33,7 @@ type role NEInsOrdHashSet nominal
 newtype NEInsOrdHashSet k =
   NEInsOrdHashSet
     { toInsOrdHashSet :: InsOrdHashSet k
-    } deriving (Eq, Semigroup, Show)
+    } deriving (Eq, Foldable, Semigroup, Show)
 
 singleton :: Hashable k => k -> NEInsOrdHashSet k
 singleton =

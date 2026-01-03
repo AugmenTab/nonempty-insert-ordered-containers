@@ -72,7 +72,10 @@ type role NEInsOrdHashMap nominal representational
 newtype NEInsOrdHashMap k v =
   NEInsOrdHashMap
     { toInsOrdHashMap :: InsOrdHashMap k v
-    } deriving (Eq, Functor, Semigroup, Show)
+    } deriving (Eq, Foldable, Functor, Semigroup, Show)
+
+instance Traversable (NEInsOrdHashMap k) where
+  traverse fn = traverseWithKey (\_ -> fn)
 
 singleton :: Hashable k => k -> v -> NEInsOrdHashMap k v
 singleton k =
