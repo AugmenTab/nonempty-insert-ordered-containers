@@ -72,7 +72,7 @@ type role NEInsOrdHashMap nominal representational
 newtype NEInsOrdHashMap k v =
   NEInsOrdHashMap
     { toInsOrdHashMap :: InsOrdHashMap k v
-    } deriving (Eq, Semigroup, Show)
+    } deriving (Eq, Functor, Semigroup, Show)
 
 singleton :: Hashable k => k -> v -> NEInsOrdHashMap k v
 singleton k =
