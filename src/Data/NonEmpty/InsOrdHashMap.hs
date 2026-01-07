@@ -50,7 +50,13 @@ module Data.NonEmpty.InsOrdHashMap
   , toList
   , toNonEmptyList
   , fromList
+  , fromListBy
+  , fromListWith
+  , fromListWithKey
   , fromNonEmptyList
+  , fromNonEmptyListBy
+  , fromNonEmptyListWith
+  , fromNonEmptyListWithKey
   , toInsOrdHashMap
   , nonEmpty
   ) where
@@ -373,9 +379,51 @@ fromList :: Hashable k => [(k, v)] -> Maybe (NEInsOrdHashMap k v)
 fromList =
   fmap fromNonEmptyList . NEL.nonEmpty
 
+fromListBy :: Hashable k => (v -> k) -> [v] -> Maybe (NEInsOrdHashMap k v)
+fromListBy fn =
+  fmap (fromNonEmptyListBy fn) . NEL.nonEmpty
+
+fromListWith :: Hashable k
+             => (v -> v -> v) -> [(k, v)] -> Maybe (NEInsOrdHashMap k v)
+fromListWith fn =
+  fmap (fromNonEmptyListWith fn) . NEL.nonEmpty
+
+fromListWithKey :: Hashable k
+                => (k -> v -> v -> v) -> [(k, v)] -> Maybe (NEInsOrdHashMap k v)
+fromListWithKey fn =
+  fmap (fromNonEmptyListWithKey fn) . NEL.nonEmpty
+
 fromNonEmptyList :: Hashable k => NEL.NonEmpty (k, v) -> NEInsOrdHashMap k v
 fromNonEmptyList =
   NEInsOrdHashMap . IOHM.fromList . NEL.toList
+
+fromNonEmptyListBy :: Hashable k
+                   => (v -> k) -> NEL.NonEmpty v -> NEInsOrdHashMap k v
+fromNonEmptyListBy fn nel =
+  List.foldl'
+    (\acc v -> insert (fn v) v acc)
+    (singleton (fn $ NEL.head nel) (NEL.head nel))
+    (NEL.tail nel)
+
+fromNonEmptyListWith :: Hashable k
+                     => (v -> v -> v)
+                     -> NEL.NonEmpty (k, v)
+                     -> NEInsOrdHashMap k v
+fromNonEmptyListWith fn nel =
+  List.foldl'
+    (\acc (k, v) -> insertWith fn k v acc)
+    (uncurry singleton $ NEL.head nel)
+    (NEL.tail nel)
+
+fromNonEmptyListWithKey :: Hashable k
+                        => (k -> v -> v -> v)
+                        -> NEL.NonEmpty (k, v)
+                        -> NEInsOrdHashMap k v
+fromNonEmptyListWithKey fn nel =
+  List.foldl'
+    (\acc (k, v) -> insertWith (fn k) k v acc)
+    (uncurry singleton $ NEL.head nel)
+    (NEL.tail nel)
 
 nonEmpty :: InsOrdHashMap k v -> Maybe (NEInsOrdHashMap k v)
 nonEmpty iohm =
